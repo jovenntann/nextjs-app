@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from "react";
 import mermaid from "mermaid";
-import { NextApiRequest, NextApiResponse } from 'next';
-import OpenAI from 'openai';
 
 // Home component is the main component for the Mermaid Diagram Generator App
 export default function Home() {
@@ -11,11 +9,14 @@ export default function Home() {
   const [diagramSyntax, setDiagramSyntax] = useState<string>("");
   // State to store the new diagram input value
   const [newDiagram, setNewDiagram] = useState<string>("");
+  // State to manage loading state
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Function to handle generating a new diagram
   const handleGenerateDiagram = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent the default form submission behavior
     if (newDiagram.trim() !== "") { // Check if the new diagram input is not empty
+      setIsLoading(true); // Set loading state to true
       try {
         const response = await fetch('/api/openai', {
           method: 'POST',
@@ -27,7 +28,8 @@ export default function Home() {
 
         const data = await response.json();
         if (response.ok) {
-          setDiagramSyntax(data.result); // Set the generated diagram syntax
+          const parsedData = JSON.parse(data.result);
+          setDiagramSyntax(parsedData.mermaid); // Set the generated diagram syntax
         } else {
           console.error(data.error);
         }
@@ -35,11 +37,13 @@ export default function Home() {
         console.error('Error generating diagram:', error);
       }
       setNewDiagram(""); // Clear the input field
+      setIsLoading(false); // Set loading state to false
     }
   };
 
   useEffect(() => {
     if (diagramSyntax) {
+      mermaid.initialize({ startOnLoad: true });
       mermaid.contentLoaded();
     }
   }, [diagramSyntax]);
@@ -60,13 +64,13 @@ export default function Home() {
           placeholder="Enter diagram description"
           className="border border-gray-300 rounded-lg p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        <button type="submit" className="bg-purple-500 text-white py-2 px-4 rounded-lg w-full hover:bg-purple-600 transition duration-300">
-          Generate
+        <button type="submit" className="bg-purple-500 text-white py-2 px-4 rounded-lg w-full hover:bg-purple-600 transition duration-300" disabled={isLoading}>
+          {isLoading ? 'Generating...' : 'Generate'}
         </button>
       </form>
       <div className="bg-gray-100 p-4 rounded-lg">
         {diagramSyntax ? (
-          <div className="mermaid">{diagramSyntax}</div>
+          <div className="mermaid" dangerouslySetInnerHTML={{ __html: diagramSyntax }} />
         ) : (
           <p className="text-gray-500 text-sm">Your generated diagram will appear here.</p>
         )}
