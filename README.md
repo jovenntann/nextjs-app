@@ -1,4 +1,4 @@
-![App Preview](./app-preview.png)
+![App Preview](./preview.png)
 
 This app is a Mermaid Diagram Generator. It allows users to create sequence diagrams by entering a description of the desired diagram. The app then generates a sequence diagram based on the provided description. The generated diagrams are rendered using the Mermaid.js library, providing a visual representation of the sequence of events described by the user. This tool is particularly useful for visualizing processes, workflows, and interactions in a clear and concise manner.
 
