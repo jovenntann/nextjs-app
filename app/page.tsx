@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="p-4 flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-400 via-gray-500 to-gray-600">
+    <main className="p-4 flex flex-col justify-center items-center min-h-screen bg-gradient-to-r from-gray-400 via-gray-500 to-gray-600">
       <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
         <h1 className="text-3xl font-semibold mb-6 text-center text-gray-800">Todo App</h1>
         <form className="mb-6">
@@ -29,6 +29,7 @@ export default function Home() {
           </li>
         </ul>
       </div>
+      <p className="mt-2 text-gray-200 text-sm">App Version: 1.0.0</p>
     </main>
   );
 }
