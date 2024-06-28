@@ -42,8 +42,8 @@ export default function Home() {
   <main className="p-4 flex flex-col justify-center items-center min-h-screen bg-gradient-to-r from-gray-400 via-gray-500 to-gray-600">
     <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
       <h1 className="text-3xl font-semibold mb-6 text-center text-gray-800">Mermaid Diagram Generator</h1>
-      <p className="mb-4 text-gray-700">
-        To use this app, simply enter a description of your desired Mermaid diagram in the input field below and click "Generate". 
+      <p className="mb-4 text-sm text-gray-700">
+        To use this app, simply enter a description of your desired Mermaid diagram in the input field below and click &quot;Generate&quot;. 
         The app will create a sequence diagram based on the provided description.
       </p>
       <form className="mb-6" onSubmit={handleGenerateDiagram}>
@@ -62,7 +62,7 @@ export default function Home() {
         {diagramSyntax ? (
           <div className="mermaid">{diagramSyntax}</div>
         ) : (
-          <p className="text-gray-500">Your generated diagram will appear here.</p>
+          <p className="text-gray-500 text-sm">Your generated diagram will appear here.</p>
         )}
       </div>
     </div>
