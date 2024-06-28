@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import mermaid from "mermaid";
+import { NextApiRequest, NextApiResponse } from 'next';
+import OpenAI from 'openai';
 
 // Home component is the main component for the Mermaid Diagram Generator App
 export default function Home() {
@@ -14,20 +16,24 @@ export default function Home() {
   const handleGenerateDiagram = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent the default form submission behavior
     if (newDiagram.trim() !== "") { // Check if the new diagram input is not empty
-      // Placeholder mermaid syntax for rendering
-      const placeholderDiagram = `
-        sequenceDiagram
-          participant User
-          participant Cognito
-          participant App
-          User->>Cognito: Sign Up / Sign In
-          Cognito-->>User: Authentication Token
-          User->>App: Access with Token
-          App->>Cognito: Validate Token
-          Cognito-->>App: Token Valid
-          App-->>User: Access Granted
-      `;
-      setDiagramSyntax(placeholderDiagram); // Set the placeholder diagram syntax
+      try {
+        const response = await fetch('/api/openai', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ prompt: newDiagram }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setDiagramSyntax(data.result); // Set the generated diagram syntax
+        } else {
+          console.error(data.error);
+        }
+      } catch (error) {
+        console.error('Error generating diagram:', error);
+      }
       setNewDiagram(""); // Clear the input field
     }
   };
